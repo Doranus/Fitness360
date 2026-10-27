@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>Double Twenty Build</title>
-<meta name="apple-mobile-web-app-title" content="DT Build">
+<title>Fitness360</title>
+<meta name="apple-mobile-web-app-title" content="Fitness360">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0E0F11">
 <link rel="manifest" href="/manifest.webmanifest">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='44' fill='%230E0F11'/%3E%3Crect x='12' y='95' width='176' height='10' rx='5' fill='%23F3F3F0'/%3E%3Crect x='28' y='44' width='48' height='112' rx='12' fill='%23D7FF3D'/%3E%3Crect x='124' y='44' width='48' height='112' rx='12' fill='%23D7FF3D'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' rx='44' fill='%230E0F11'/%3E%3Cpath d='M100 38A62 62 0 1 1 44 73' fill='none' stroke='%23D7FF3D' stroke-width='18' stroke-linecap='round'/%3E%3Cpolygon points='60%2C46 31%2C61 61%2C80' fill='%23D7FF3D' stroke='%23D7FF3D' stroke-width='6' stroke-linejoin='round'/%3E%3Ccircle cx='100' cy='100' r='16' fill='%23F3F3F0'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -105,6 +105,15 @@ details.cue p{margin:0 0 6px;font-size:14px}
 .st label{flex:1;display:flex;gap:10px;align-items:center;padding:6px 10px;cursor:pointer;font-size:14px}
 .st input{width:22px;height:22px;accent-color:var(--ok);flex:none}
 .st small{display:block;color:var(--muted);font-size:12px}
+/* week */
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:14px}
+.wd{background:var(--sunk);border-radius:10px;padding:6px 2px;text-align:center;min-width:0;border:1.5px solid transparent}
+.wd b{display:block;font-size:11px;color:var(--muted)}
+.wd span{display:block;font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 2px}
+.wd i{display:block;font-style:normal;font-weight:800;font-size:13px;height:16px;color:var(--ok)}
+.wd.r span{color:var(--muted);font-weight:500}
+.wd.t{border-color:var(--volt)}
+.wd.ok{background:var(--ok-soft)}
 /* routine */
 .rex{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--line)}
 .rex:first-child{border-top:0}
@@ -212,7 +221,7 @@ button.entry{cursor:pointer}
 </head><body>
 <div class="wrap">
   <header class="top">
-    <h1 class="brand"><svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="44" fill="#0E0F11"/><rect x="12" y="95" width="176" height="10" rx="5" fill="#F3F3F0"/><rect x="28" y="44" width="48" height="112" rx="12" fill="var(--volt)"/><rect x="124" y="44" width="48" height="112" rx="12" fill="var(--volt)"/></svg><span id="title">Double Twenty <span class="t2">Build</span></span></h1>
+    <h1 class="brand"><svg viewBox="0 0 200 200" aria-hidden="true"><rect width="200" height="200" rx="44" fill="#0E0F11"/><path d="M100 38A62 62 0 1 1 44 73" fill="none" stroke="var(--volt)" stroke-width="18" stroke-linecap="round"/><polygon points="60,46 31,61 61,80" fill="var(--volt)" stroke="var(--volt)" stroke-width="6" stroke-linejoin="round"/><circle cx="100" cy="100" r="16" fill="#F3F3F0"/></svg><span id="title">Fitness<span class="t2">360</span></span></h1>
     <div class="hdr"><button class="chipbtn" id="userbtn" data-a="switch" hidden></button><button class="chipbtn" id="themebtn">Auto</button></div>
   </header>
   <main id="view"></main>
@@ -298,14 +307,16 @@ const TEMPLATES={
   'Push day':['Dumbbell bench press','Incline dumbbell press','Dumbbell shoulder press','Lateral raise','Tricep pushdown','Push-up'],
   'Pull day':['Lat pulldown','Seated cable row','One-arm dumbbell row','Face pull','Bicep curl','Assisted pull-up'],
   'Leg day':['Goblet squat','Leg press','Romanian deadlift','Walking lunge','Leg curl','Calf raise'],
-  'Full body':['Goblet squat','Dumbbell bench press','Lat pulldown','Romanian deadlift','Plank']
+  'Full body':['Goblet squat','Dumbbell bench press','Lat pulldown','Romanian deadlift','Plank'],
+  'Upper body':['Dumbbell bench press','Lat pulldown','Dumbbell shoulder press','Seated cable row','Bicep curl','Tricep pushdown'],
+  'Lower body':['Goblet squat','Romanian deadlift','Leg press','Walking lunge','Calf raise','Plank']
 };
 const CARDIO=['Bike','Cross-trainer','Rower','Treadmill','Jog / run','Stairs','Skipping','Other'];
 const STRETCH=[['Hamstring stretch','Reach towards your toes with a flat back'],['Quad stretch','Hold your ankle behind you, knees together'],['Hip flexor stretch','Half-kneeling, tuck hips under, shift forward'],['Chest stretch','Forearm on a doorframe, turn away gently'],['Lat stretch','Hold a post, sit hips back and let your arms stretch'],['Child’s pose','Kneel, sit back on your heels, arms long']];
 const ACT_TYPES=['Walk','Run','Basketball','Bike','Swim','Football','Gym cardio','Other'];
 
 /* ================= State ================= */
-const APPV='1.0',PK='dtBuild.profiles',LS0='dtBuild.v1';
+const APPV='1.1',PK='dtBuild.profiles',LS0='dtBuild.v1';
 const blank=()=>({v:1,days:[],sessions:[],library:[],acts:[],goals:[],body:{age:'',height:'',weights:[]},settings:{rest:90,daily:30,skin:'graphite',sound:true,autofull:false},cur:null,updatedAt:0});
 let S=blank(),LS=null,P={list:[],cur:null};
 try{P=Object.assign(P,JSON.parse(localStorage.getItem(PK)||'{}'));}catch(e){}
@@ -398,9 +409,10 @@ function renderSession(s){const all=sessSets(s),dn=all.filter(x=>x.done).length;
   ${s.done?`<p class="sub" style="margin-top:10px">Saved ${fmtDay(s.date)}.</p><button class="btn danger full" style="margin-top:10px" data-a="delsess">Delete this workout</button>`:`<button class="btn ok full big" style="margin-top:12px" data-a="finish">Finish workout</button><button class="btn ghost full" style="margin-top:8px;color:var(--red)" data-a="discard">Discard workout</button>`}</div>`;
   $('#view').innerHTML=h;}
 function renderStart(){let h=stripHTML();
+  if(S.week)h+=todayCard();else if(S.days.length)h+=`<div class="card"><p class="h2">Plan your week</p><p class="sub">Set which workout you do on each day. It repeats every week, so the app always knows what’s next.</p><button class="btn primary full" style="margin-top:10px" data-a="su-open">Set up my 7-day plan</button></div>`;
   if(!S.days.length){h+=`<div class="card"><p class="h1">Build your routine</p><p class="sub">Create your workout days, like Push, Pull and Legs, then pick one here to start. Start from a template or from scratch.</p>
     <p class="lbl">Quick start</p><div class="chips">${Object.keys(TEMPLATES).map(t=>`<button class="chip" data-a="tpl" data-t="${t}">${t}</button>`).join('')}<button class="chip" data-a="newday">From scratch</button></div></div>`;}
-  else{h+=`<div class="card"><p class="h2">Start a workout</p><p class="sub">Pick today’s workout. Cardio is included in every one.</p>`+S.days.map(d=>{const last=S.sessions.filter(s=>s.dayId===d.id&&s.done).sort((a,b)=>b.startedAt-a.startedAt)[0];
+  else{h+=`<div class="card"><p class="h2">${S.week?'Other workouts':'Start a workout'}</p><p class="sub">${S.week?'Want to do something different today? Pick any workout.':'Pick today’s workout. Cardio is included in every one.'}</p>`+S.days.map(d=>{const last=S.sessions.filter(s=>s.dayId===d.id&&s.done).sort((a,b)=>b.startedAt-a.startedAt)[0];
     return `<div class="dayc" style="margin-top:12px"><div class="meta"><b>${esc(d.name)}</b><div class="ex">${d.ex.length} exercises${d.ex.length?' · '+esc(d.ex.map(e=>e.name).join(', ')):''}</div><div class="ex">${last?'Last done '+fmtDay(last.date):'Not done yet'}</div></div><button class="btn primary" data-a="start" data-id="${d.id}">Start</button></div>`;}).join('')+
     `<button class="btn ghost full" style="margin-top:12px" data-a="start">Start an empty workout</button></div>`;}
   const done=S.sessions.filter(s=>s.done).sort((a,b)=>b.startedAt-a.startedAt).slice(0,5);
@@ -408,10 +420,57 @@ function renderStart(){let h=stripHTML();
   $('#view').innerHTML=h;}
 function renderWorkout(){const v=viewSess&&sessById(viewSess);if(v)return renderSession(v);const a=active();if(a)return renderSession(a);renderStart();}
 
+
+/* ================= Weekly plan ================= */
+const WD=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'],WS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const dow=d=>(new Date((d||today())+'T00:00').getDay()+6)%7;
+const SPLITS={
+  ppl:{n:'Push · Pull · Legs',sub:'Classic for building strength',T:{P:'Push day',U:'Pull day',L:'Leg day'},p:{3:'P-U-LC-',4:'PU-LPC-',5:'PUL-PU-',6:'PULPUL-'}},
+  ul:{n:'Upper · Lower',sub:'Simple and balanced',T:{U:'Upper body',L:'Lower body'},p:{3:'U-L-UC-',4:'UL-ULC-',5:'UL-ULU-',6:'ULULUL-'}},
+  fb:{n:'Full body',sub:'Best for beginners',T:{F:'Full body'},p:{3:'F-F-FC-',4:'F-FCFF-',5:'FF-FFCF',6:'FFF-FFF'}},
+  own:{n:'I’ll build my own',sub:'Choose workouts for each day yourself',T:{},p:{}}
+};
+let SU=null;
+function suDraft(){const sp=SPLITS[SU.split];if(!sp||SU.split==='own')return;const pat=sp.p[SU.n]||sp.p[3];SU.plan=[...pat].map(c=>c==='-'?'rest':c==='C'?'cardio':'t:'+sp.T[c]);}
+function planOpts(sel,extraTpl){const o=[...S.days.map(d=>['d:'+d.id,d.name]),...(extraTpl||[]).filter(n=>!S.days.some(d=>d.name===n)).map(n=>['t:'+n,n]),['cardio','Cardio only'],['rest','Rest day']];
+  if(sel&&sel.startsWith('t:')&&S.days.some(d=>d.name===sel.slice(2)))sel='d:'+S.days.find(d=>d.name===sel.slice(2)).id;
+  return o.map(([v,l])=>`<option value="${esc(v)}" ${v===sel?'selected':''}>${esc(l)}</option>`).join('');}
+function renderSetup(){if(!SU)SU={split:S.days.length?'mine':'ppl',n:4,touched:false,plan:S.week?S.week.map(x=>x==='rest'||x==='cardio'?x:'d:'+x):Array(7).fill('rest')};
+  if(SU.split==='mine'&&!SU.init){SU.init=true;if(!S.week)SU.plan=S.days.map(d=>'d:'+d.id).concat(Array(7).fill('rest')).slice(0,7);}
+  if(SU.split!=='mine'&&SU.split!=='own'&&!SU.touched)suDraft();
+  const sp=SPLITS[SU.split]||{T:{}},tpl=Object.values(sp.T||{});
+  const opts=[...(S.days.length?[['mine','Use my workouts','The workout days you’ve already built']]:[]),...Object.entries(SPLITS).map(([k,v])=>[k,v.n,v.sub])];
+  let h=`<div class="card"><p class="sub" style="margin:0">Step 1 of 2</p><p class="h1">Plan your week</p><p class="sub">Pick a style and how many days you want to train. Your plan repeats every week, and you can change it any time.</p>
+  <div style="margin-top:12px">${opts.map(([k,n,sub])=>`<button class="libi" data-a="su-split" data-k="${k}" aria-pressed="${SU.split===k}" style="margin-bottom:6px"><span class="nm">${n}<small>${sub}</small></span><span class="ck">✓</span></button>`).join('')}</div>
+  ${SU.split==='mine'||SU.split==='own'?'':`<p class="lbl">Training days a week</p><div class="chips">${[3,4,5,6].map(n=>`<button class="chip" data-a="su-n" data-n="${n}" aria-pressed="${SU.n===n}">${n} days</button>`).join('')}</div>`}</div>
+  <div class="card"><p class="sub" style="margin:0">Step 2 of 2</p><p class="h2">Your week</p><p class="sub">Change any day. Every workout includes cardio.${SU.split==='own'?' You can add workouts to your routine afterwards and pick them here.':''}</p>
+  ${WD.map((d,i)=>`<div class="rex"><div class="nm">${d}</div><select class="input" style="width:58%;min-height:44px" data-su="${i}" aria-label="${d}">${planOpts(SU.plan[i],tpl)}</select></div>`).join('')}</div>
+  <button class="btn primary full big" data-a="su-save">${S.week?'Save my week':'Create my plan'}</button>
+  <button class="btn ghost full" style="margin-top:8px" data-a="su-skip">${S.week?'Cancel':'Skip for now'}</button>`;
+  $('#view').innerHTML=h;}
+function suSave(){const made={};
+  S.week=SU.plan.map(v=>{if(v==='rest'||v==='cardio')return v;if(v.startsWith('d:'))return dayById(v.slice(2))?v.slice(2):'rest';
+    const n=v.slice(2);if(!made[n]){const ex=S.days.find(d=>d.name===n);made[n]=ex?ex.id:makeDay(n,TEMPLATES[n]||[]).id;}return made[n];});
+  save();SU=null;}
+function plannedFor(d){if(!S.week)return null;const v=S.week[dow(d)];if(!v)return null;if(v==='rest'||v==='cardio')return v;return dayById(v)?v:'rest';}
+function dayDone(d){const p=plannedFor(d);if(!p||p==='rest')return false;if(p==='cardio')return dayMins(entries(),d)>0;return S.sessions.some(s=>s.done&&s.date===d&&s.dayId===p);}
+function weekStrip(){const mon=addDays(today(),-dow()),td=today();
+  return `<div class="wk" role="list" aria-label="This week">${WS.map((n,i)=>{const d=addDays(mon,i),p=plannedFor(d),done=dayDone(d),past=d<td,isT=d===td;
+    const lab=p==='rest'?'Rest':p==='cardio'?'Cardio':(dayById(p)||{name:'Rest'}).name;
+    return `<div class="wd ${isT?'t':''} ${done?'ok':''} ${p==='rest'?'r':''}" role="listitem" aria-label="${WD[i]}: ${esc(lab)}${done?', done':isT?', today':''}"><b>${n}</b><span>${esc(lab.split(' ')[0])}</span><i>${done?'✓':p!=='rest'&&past?'–':''}</i></div>`;}).join('')}</div>`;}
+function todayCard(){const p=plannedFor(today()),done=dayDone(today()),d=p&&p!=='rest'&&p!=='cardio'?dayById(p):null;
+  let h=`<div class="card"><div class="between"><p class="sub" style="margin:0">Today · ${WD[dow()]}</p><button class="btn sm ghost" data-a="su-open">Edit week</button></div>`;
+  if(d){const last=S.sessions.find(s=>s.done&&s.date===today()&&s.dayId===d.id);
+    h+=`<p class="h1">${esc(d.name)}</p><p class="sub">${d.ex.length} exercises · ${d.cardioMin} min cardio${d.ex.length?' · '+esc(d.ex.map(e=>e.name).join(', ')):''}</p>`+(done?`<button class="btn ok full big" style="margin-top:12px" data-a="viewsess" data-id="${last.id}">✓ Done today · view</button>`:`<button class="btn primary full big" style="margin-top:12px" data-a="start" data-id="${d.id}">Start ${esc(d.name)}</button>`);}
+  else if(p==='cardio')h+=`<p class="h1">Cardio day</p><p class="sub">${done?'Nice, cardio logged ✓':'Get moving: a run, a ride, a game of basketball. Log it here.'}</p><button class="btn ${done?'':'primary'} full big" style="margin-top:12px" data-a="actopen">+ Log cardio</button>`;
+  else h+=`<p class="h1">Rest day</p><p class="sub">Recover and come back stronger. A walk still counts towards your activity.</p><button class="btn full" style="margin-top:12px" data-a="actopen">+ Log a walk or activity</button>`;
+  return h+weekStrip()+'</div>';}
+
 /* ================= Routine ================= */
 function makeDay(name,list){const d={id:uid(),name,cardioMin:15,ex:(list||[]).map(n=>({name:n,sets:3,reps:defReps(tOf(n))}))};S.days.push(d);save();return d;}
 function renderRoutine(){const d=editDay&&dayById(editDay);if(d)return renderDayEdit(d);
   let h=`<div class="card"><p class="h1">Your routine</p><p class="sub">Your workout days. Every exercise you add gets 3 sets, and every workout includes cardio.</p></div>`;
+  h+=`<div class="card"><div class="between"><p class="h2">Weekly plan</p><button class="btn sm" data-a="su-open">${S.week?'Edit':'Set up'}</button></div><p class="sub">${S.week?'Repeats every week.':'Choose a workout for each day of the week.'}</p>${S.week?WD.map((d,i)=>{const v=S.week[i],l=v==='rest'?'Rest':v==='cardio'?'Cardio only':(dayById(v)||{name:'Rest'}).name;return `<div class="rex"><div class="nm">${d}</div><span class="sub" style="margin:0;font-weight:600;color:var(--${v==='rest'?'muted':'ink'})">${esc(l)}</span></div>`;}).join(''):''}</div>`;
   h+=S.days.map(d=>`<div class="card"><div class="between"><div style="min-width:0"><p class="h2">${esc(d.name)}</p><p class="sub">${d.ex.length} exercises · ${d.cardioMin} min cardio</p></div><div class="row" style="flex-wrap:nowrap"><button class="btn sm" data-a="editday" data-id="${d.id}">Edit</button><button class="btn sm primary" data-a="start" data-id="${d.id}">Start</button></div></div>
     ${d.ex.length?`<p class="sub" style="margin-top:8px">${esc(d.ex.map(e=>e.name).join(' · '))}</p>`:''}</div>`).join('');
   h+=`<button class="btn primary full big" data-a="newday">+ New workout day</button>`;
@@ -557,7 +616,7 @@ let installEvt=null;const standalone=()=>matchMedia('(display-mode: standalone)'
 function renderSettings(){const u=curUser(),st=S.settings;
   $('#view').innerHTML=`<div class="card"><p class="h2">Profile</p><p class="sub">Signed in as <b>${esc(u.name)}</b>. Each profile’s data is separate on this device.</p><div class="row" style="margin-top:10px"><button class="btn" data-a="switch">Switch user</button><button class="btn danger" data-a="delprof">Delete this profile</button></div></div>
   <div class="card"><p class="h2">Theme</p><p class="sub">Light or dark follows your phone. The button at the top changes it.</p><div class="skins">${[['graphite','Graphite',['#0E0F11','#D7FF3D','#3DDC97']],['melon','Melon 🍉',['#E8435E','#2E7D4F','#BEE8C8']]].map(([k,l,c])=>`<button class="skin ${st.skin===k?'on':''}" data-a="skin" data-k="${k}" aria-pressed="${st.skin===k}"><span class="sw">${c.map(x=>`<i style="background:${x}"></i>`).join('')}</span>${l}</button>`).join('')}</div></div>
-  <div class="card"><p class="h2">App name</p><div class="row" style="margin-top:8px;flex-wrap:nowrap"><input class="input" id="titlein" maxlength="30" value="${esc(st.title||'Double Twenty Build')}" aria-label="App name"><button class="btn primary" data-a="titlesave">Save</button></div></div>
+  <div class="card"><p class="h2">App name</p><div class="row" style="margin-top:8px;flex-wrap:nowrap"><input class="input" id="titlein" maxlength="30" value="${esc(st.title||'Fitness360')}" aria-label="App name"><button class="btn primary" data-a="titlesave">Save</button></div></div>
   <div class="card"><p class="h2">Rest timer</p><p class="sub">Starts by itself when you tick a set.</p>
   <select class="input" id="restsel" style="margin-top:8px" aria-label="Rest length">${[[60,'1 minute'],[90,'1 min 30'],[120,'2 minutes'],[180,'3 minutes']].map(([v,l])=>`<option value="${v}" ${+st.rest===v?'selected':''}>${l}</option>`).join('')}</select>
   <label class="tog" style="margin-top:8px"><span>Open full screen automatically</span><input type="checkbox" data-tog="autofull" ${st.autofull?'checked':''}></label>
@@ -566,7 +625,7 @@ function renderSettings(){const u=curUser(),st=S.settings;
   <div class="card"><p class="h2">Backup your data</p><p class="sub">Your data is saved on this device. Download a backup now and then (photos included) and restore it on a new phone.${st.lastBackup?` Last backup: <b>${fmtDate(st.lastBackup)}</b>.`:' <b>No backup yet.</b>'}</p><div class="row" style="margin-top:10px"><button class="btn primary" data-a="backup">Download backup</button><button class="btn" data-a="restore">Restore from backup</button></div></div>
   <div class="card"><p class="h2">Install the app</p>${standalone()?'<p class="sub">You’re using the installed app ✓</p>':`<p class="sub">Home-screen icon, full screen and offline use in the gym.</p>${installEvt?'<button class="btn primary" style="margin-top:8px" data-a="install">Install app</button>':'<p class="sub"><b>iPhone:</b> Safari, Share, Add to Home Screen.<br><b>Android:</b> Chrome, ⋮, Install app.</p>'}`}</div>
   <p class="sub" style="text-align:center">Version ${APPV}</p>`;}
-function applyTitle(){const t=((curUser()&&S.settings.title)||'Double Twenty Build').trim(),w=t.split(' ');$('#title').innerHTML=w.length>1?esc(w.slice(0,-1).join(' '))+' <span class="t2">'+esc(w[w.length-1])+'</span>':esc(t);document.title=t;}
+function applyTitle(){const t=((curUser()&&S.settings.title)||'Fitness360').trim(),w=t.split(' '),m=t.match(/^(\S*?[^\d\s])(\d+)$/);$('#title').innerHTML=w.length>1?esc(w.slice(0,-1).join(' '))+' <span class="t2">'+esc(w[w.length-1])+'</span>':m?esc(m[1])+'<span class="t2">'+esc(m[2])+'</span>':esc(t);document.title=t;}
 function applySkin(){const k=curUser()?S.settings.skin||'graphite':'graphite';document.documentElement.setAttribute('data-skin',k);const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content',k==='melon'?'#D42A45':'#0E0F11');}
 
 /* ================= Login ================= */
@@ -574,7 +633,7 @@ function renderLogin(){$('#view').innerHTML=`<div class="card"><p class="h1">Who
   ${P.list.length?`<div style="margin-top:12px">${P.list.map(p=>`<button class="pick" data-a="login" data-id="${p.id}">👤 ${esc(p.name)}<small>Open ›</small></button>`).join('')}</div>`:''}
   <p class="lbl">${P.list.length?'Add someone new':'Enter your name to start'}</p><div class="row" style="flex-wrap:nowrap"><input class="input" id="uname" placeholder="Your name" maxlength="24" autocomplete="off"><button class="btn primary" data-a="newuser">Start</button></div>
   <p class="sub" style="font-size:13px;margin-top:10px">No password: anyone using this device can open any profile.</p></div>`;}
-function login(id){try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}PH=null;P.cur=id;saveP();loadProfile(id);tab=S.days.length?'workout':'routine';editDay=null;viewSess=null;render();scrollTo(0,0);}
+function login(id){try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(e){}PH=null;P.cur=id;saveP();loadProfile(id);tab=!S.week&&!S.days.length?'setup':S.days.length?'workout':'routine';SU=null;editDay=null;viewSess=null;render();scrollTo(0,0);}
 function newUser(n){n=n.trim().replace(/\s+/g,' ');if(!n){toast('Type your name');return;}const ex=P.list.find(p=>p.name.toLowerCase()===n.toLowerCase());if(ex)return login(ex.id);const id=uid();P.list.push({id,name:n});login(id);toast('Welcome, '+n+' 👋');}
 
 /* ================= Timer ================= */
@@ -608,7 +667,7 @@ setInterval(ui,250);
 /* ================= Render ================= */
 function render(){const u=curUser();$('nav.tabs').hidden=!u;const ub=$('#userbtn');ub.hidden=!u;if(u)ub.textContent='👤 '+u.name;applySkin();applyTitle();
   document.querySelectorAll('nav.tabs [data-tab]').forEach(b=>b.setAttribute('aria-current',b.dataset.tab===tab?'page':'false'));
-  if(!u){renderLogin();ui();return;}({workout:renderWorkout,routine:renderRoutine,activity:renderActivity,progress:renderProgress,settings:renderSettings})[tab]();ui();}
+  if(!u){renderLogin();ui();return;}({workout:renderWorkout,routine:renderRoutine,activity:renderActivity,progress:renderProgress,settings:renderSettings,setup:renderSetup})[tab]();ui();}
 /* ================= Events ================= */
 function sess(){return (viewSess&&sessById(viewSess))||active();}
 document.addEventListener('click',e=>{
@@ -617,6 +676,11 @@ document.addEventListener('click',e=>{
   if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)();}catch(err){}}
   switch(a){
   case 'close':closeSheet();return;
+  case 'su-open':SU=null;tab='setup';render();scrollTo(0,0);return;
+  case 'su-split':SU.split=b.dataset.k;SU.touched=false;if(SU.split==='mine'){SU.plan=S.days.map(d=>'d:'+d.id);while(SU.plan.length<7)SU.plan.push('rest');SU.plan=SU.plan.slice(0,7);}else if(SU.split==='own')SU.plan=Array(7).fill('rest');renderSetup();return;
+  case 'su-n':SU.n=+b.dataset.n;SU.touched=false;renderSetup();return;
+  case 'su-save':{const first=!S.week;suSave();tab='workout';editDay=null;render();scrollTo(0,0);toast(first?'Your 7-day plan is set. It repeats every week 💪':'Week saved ✓');return;}
+  case 'su-skip':SU=null;tab=S.days.length?'workout':'routine';render();return;
   case 'login':login(id);return;
   case 'newuser':newUser($('#uname').value);return;
   case 'switch':stopTimer();closeSheet();P.cur=null;saveP();LS=null;S=blank();render();return;
@@ -660,7 +724,7 @@ document.addEventListener('click',e=>{
   case 'dcardio':{const d=dayById(editDay);d.cardioMin=+b.dataset.m;save();renderDayEdit(d);return;}
   case 'dup':{const d=dayById(editDay),i=+b.dataset.i;if(i>0){[d.ex[i-1],d.ex[i]]=[d.ex[i],d.ex[i-1]];save();renderDayEdit(d);}return;}
   case 'drm':{const d=dayById(editDay),i=+b.dataset.i,[x]=d.ex.splice(i,1);save();renderDayEdit(d);toast(x.name+' removed',()=>{d.ex.splice(i,0,x);save();renderDayEdit(d);});return;}
-  case 'delday':{const d=dayById(editDay);if(d&&confirm('Delete '+d.name+'? Past workouts stay in your history.')){S.days=S.days.filter(x=>x!==d);editDay=null;save();render();}return;}
+  case 'delday':{const d=dayById(editDay);if(d&&confirm('Delete '+d.name+'? Past workouts stay in your history.')){S.days=S.days.filter(x=>x!==d);if(S.week)S.week=S.week.map(v=>v===d.id?'rest':v);editDay=null;save();render();}return;}
   /* activity */
   case 'actopen':openAct();return;
   case 'actedit':openAct(id);return;
@@ -702,10 +766,10 @@ document.addEventListener('click',e=>{
   case 'preset':S.settings.rest=+b.dataset.r;save();if(T.end&&T.label==='Rest')startTimer(restLen(),'Rest');else ui();return;
   /* settings */
   case 'skin':S.settings.skin=b.dataset.k;save();render();return;
-  case 'titlesave':{const v=$('#titlein').value.trim().replace(/\s+/g,' ');S.settings.title=v==='Double Twenty Build'?'':v;save();applyTitle();toast('App name saved ✓');return;}
+  case 'titlesave':{const v=$('#titlein').value.trim().replace(/\s+/g,' ');S.settings.title=v==='Fitness360'?'':v;save();applyTitle();toast('App name saved ✓');return;}
   case 'install':if(installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>{installEvt=null;render();});}return;
-  case 'backup':(async()=>{await loadPh();const u=curUser(),blob=new Blob([JSON.stringify({app:'dt-build',v:1,name:u.name,exported:new Date().toISOString(),data:S,photos:(PH||[]).map(({id,date,kind,data})=>({id,date,kind,data}))})],{type:'application/json'});
-    try{const url=URL.createObjectURL(blob),l=document.createElement('a');l.href=url;l.download='dt-build-'+u.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+today()+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);S.settings.lastBackup=today();save();renderSettings();toast('Backup downloaded ✓');}catch(err){toast('Backup not available here');}})();return;
+  case 'backup':(async()=>{await loadPh();const u=curUser(),blob=new Blob([JSON.stringify({app:'fitness360',v:1,name:u.name,exported:new Date().toISOString(),data:S,photos:(PH||[]).map(({id,date,kind,data})=>({id,date,kind,data}))})],{type:'application/json'});
+    try{const url=URL.createObjectURL(blob),l=document.createElement('a');l.href=url;l.download='fitness360-'+u.name.toLowerCase().replace(/[^a-z0-9]+/g,'-')+'-'+today()+'.json';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);S.settings.lastBackup=today();save();renderSettings();toast('Backup downloaded ✓');}catch(err){toast('Backup not available here');}})();return;
   case 'restore':$('#restorefile').value='';$('#restorefile').click();return;
   }});
 document.addEventListener('input',e=>{const t=e.target;
@@ -720,6 +784,7 @@ document.addEventListener('input',e=>{const t=e.target;
 document.addEventListener('change',e=>{const t=e.target;
   if(t.dataset.car&&t.tagName==='SELECT'){const s=sess();s.car.type=t.value;if(s.car.saved){s.car.saved=false;}save();renderWorkout();return;}
   if(t.dataset.c==='st'){const s=sess();s.st[t.dataset.i]=t.checked;save();t.closest('.st').classList.toggle('on',t.checked);return;}
+  if(t.dataset.su!==undefined&&SU){SU.plan[+t.dataset.su]=t.value;SU.touched=true;return;}
   if(t.id==='gt'||t.id==='gex'){goalForm(true);return;}
   if(t.id==='liftsel'){liftSel=t.value;renderProgress();return;}
   if(t.id==='restsel'){S.settings.rest=+t.value;save();ui();toast('Rest time saved');return;}
@@ -739,7 +804,7 @@ $('#restorefile').addEventListener('change',e=>{const f=e.target.files&&e.target
   rd.onload=()=>{try{const j=JSON.parse(rd.result),d=j&&j.data;if(!d||!Array.isArray(d.sessions))throw 0;const n=d.sessions.filter(s=>s.done).length;
     if(!confirm(`Restore this backup${j.exported?' from '+fmtDate(j.exported.slice(0,10)):''}? It has ${n} workout${n===1?'':'s'} and replaces ${curUser().name}’s data on this device.`))return;
     S=d;fix();save();(async()=>{if(Array.isArray(j.photos)){try{await loadPh();for(const x of PH)await PDB.del(x.id);for(const x of j.photos)await PDB.put({...x,prof:P.cur});}catch(err){}}await loadPh();render();toast('Backup restored ✓');})();}
-    catch(err){toast('That file isn’t a Double Twenty Build backup');}};rd.readAsText(f);});
+    catch(err){toast('That file isn’t a Fitness360 backup');}};rd.readAsText(f);});
 
 /* ================= Theme (light/dark) ================= */
 const THK='dtBuild.theme',TH=['auto','light','dark'],THL={auto:'◐',light:'☀',dark:'☾'},THA={auto:'Theme: automatic',light:'Theme: light',dark:'Theme: dark'};let theme='auto';try{theme=localStorage.getItem(THK)||'auto';}catch(e){}
@@ -750,7 +815,7 @@ applyTheme();
 /* ================= Install / offline ================= */
 addEventListener('beforeinstallprompt',e=>{e.preventDefault();installEvt=e;if(tab==='settings'&&curUser())renderSettings();});
 if('serviceWorker' in navigator&&isSecureContext)addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js',{scope:'/'}).catch(()=>{});});
-if(curUser()&&!S.days.length)tab='routine';
+if(curUser()&&!S.week&&!S.days.length)tab='setup';else if(curUser()&&!S.days.length)tab='routine';
 render();
 </script>
 </body>

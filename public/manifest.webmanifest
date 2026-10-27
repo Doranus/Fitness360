@@ -1,7 +1,7 @@
 {
-  "name": "Double Twenty Build",
-  "short_name": "DT Build",
-  "description": "Build your own push, pull and legs routine with cardio every workout",
+  "name": "Fitness360",
+  "short_name": "Fitness360",
+  "description": "Build your own training routine, with cardio every workout",
   "id": "/",
   "start_url": "/",
   "scope": "/",
