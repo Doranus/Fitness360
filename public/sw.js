@@ -1,8 +1,8 @@
-// Service worker for Double Twenty Starter.
+// Service worker for Double Twenty Build.
 // Bump VERSION whenever you change this file. The app page itself is always
 // fetched fresh when online (network first), so normal app updates show up
 // straight away; the saved copy is only used when you're offline.
-const VERSION = 'dt-starter-v1';
+const VERSION = 'dt-build-v1';
 const PAGE = '/';
 const CORE = [PAGE, '/manifest.webmanifest', '/icon-192.png', '/icon-512.png', '/apple-icon.png'];
 
